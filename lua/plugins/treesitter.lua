@@ -43,8 +43,9 @@ vim.treesitter.language.register("systemverilog", { "verilog" })
 local function start_treesitter()
 	local ok = pcall(vim.treesitter.start)
 
-	if ok then
-		vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+	-- Keep Treesitter syntax highlighting enabled without taking over indentation.
+	if not ok then
+		return
 	end
 end
 

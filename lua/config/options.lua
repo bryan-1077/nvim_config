@@ -36,8 +36,9 @@ local options = {
 	conceallevel = 2, --markdown conceal
 	concealcursor = "nc",
 
-	splitkeep = 'screen', --stablizie window open/close
-}
+		splitkeep = 'screen', --stablizie window open/close
+		fillchars = { vert = "│" },
+	}
 
 for k, v in pairs(options) do
 	vim.opt[k] = v

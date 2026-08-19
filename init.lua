@@ -27,6 +27,7 @@ Plug('nvim-treesitter/nvim-treesitter') --improved syntax
 Plug('mfussenegger/nvim-lint') --async linter
 Plug('nvim-tree/nvim-tree.lua') --file explorer
 Plug('windwp/nvim-autopairs') --autopairs 
+Plug('kylechui/nvim-surround') --surround editing
 Plug('lewis6991/gitsigns.nvim') --git
 Plug('numToStr/Comment.nvim') --easier comments
 Plug('norcalli/nvim-colorizer.lua') --color highlight
@@ -64,15 +65,44 @@ require("plugins.render-markdown")
 -- require("plugins.twilight")
 -- require("plugins.which-key")
 
+-- Key rebinds
+vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Half-page down and center" })
+vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Half-page up and center" })
+vim.opt.clipboard = "unnamedplus" -- Yanking goes to clipboard
+
+-- Tabs
+vim.opt.autoindent = true
+-- vim.opt.smartindent = true
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
+
 vim.defer_fn(function()
 	require("plugins.autopairs")
 	require("plugins.fterm")
 	require("plugins.fzf-lua")
 	require("plugins.nvim-tree")
+	require("plugins.nvim-surround")
 	require("plugins.treesitter")
 	require("plugins.twilight")
 	require("plugins.which-key")
 
 end, 100)
 
+-- Disable Treesitter SV autoindent
+vim.api.nvim_create_autocmd("BufEnter", {
+    pattern = { "*.v", "*.sv", "*.vh", "*.svh" },
+    callback = function()
+        vim.opt_local.tabstop = 4
+        vim.opt_local.shiftwidth = 4
+        vim.opt_local.expandtab = true
+
+        -- Use Neovim's built-in indentation
+        vim.opt_local.autoindent = true
+        vim.opt_local.smartindent = true
+
+        -- Prevent Treesitter from controlling indentation
+        vim.opt_local.indentexpr = ""
+    end,
+})
 -- load_theme()

@@ -25,7 +25,7 @@ require("barbar").setup({
       changed = {enabled = true, icon = ' '},
       deleted = {enabled = true, icon = ' '},
     },
-    separator = {left = '▎', right = ''},
+	    separator = {left = '│', right = ''},
 
     -- If true, add an additional separator at the end of the buffer list
     separator_at_end = true,

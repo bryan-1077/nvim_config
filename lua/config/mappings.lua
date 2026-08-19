@@ -10,8 +10,8 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 -- buffers
-map("n", "<S-l>", ":bnext<CR>")
-map("n", "<S-h>", ":bprevious<CR>")
+map("n", "<S-l>", "<Cmd>BufferNext<CR>")
+map("n", "<S-h>", "<Cmd>BufferPrevious<CR>")
 map("n", "<leader>q", ":BufferClose<CR>")
 map("n", "<leader>Q", ":BufferClose!<CR>")
 map("n", "<leader>U", "::bufdo bd<CR>") --close all

@@ -9,7 +9,7 @@ local highlights = {
 	-- ============================================================
 
 	["@comment.systemverilog"] = {
-		fg = "#6c7086",
+		fg = "#6a9955",
 		italic = true,
 	},
 
@@ -31,6 +31,10 @@ local highlights = {
 	["@keyword.directive.define.systemverilog"] = {
 		fg = "#c678dd",
 		bold = true,
+	},
+
+	["@attribute.systemverilog"] = {
+		fg = "#e06c75",
 	},
 
 	-- ============================================================

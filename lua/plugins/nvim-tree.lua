@@ -3,15 +3,25 @@ renderer = {
 --note on icons:
 --in some terminals, some patched fonts cut off glyphs if not given extra space
 --either add extra space, disable icons, or change font
-	icons = {
-		show = {
-		file = false,
-		folder = false,
-		folder_arrow = true,
-		git = true,
+		icons = {
+			show = {
+			file = false,
+			folder = false,
+			folder_arrow = true,
+			git = true,
+			},
+			glyphs = {
+				git = {
+					unstaged = "~",
+					staged = "✓",
+					untracked = "+",
+					renamed = ">",
+					deleted = "-",
+					ignored = "·",
+				},
+			},
 		},
 	},
-},
 	view = {
 		width = 25,
 		side = 'left',
@@ -25,6 +35,19 @@ renderer = {
 		update_root = true,
 	},
 })
+
+local git_icon_highlights = {
+	NvimTreeGitDirtyIcon = "#E2C08D",
+	NvimTreeGitStagedIcon = "#73C991",
+	NvimTreeGitNewIcon = "#73C991",
+	NvimTreeGitRenamedIcon = "#73C991",
+	NvimTreeGitDeletedIcon = "#C74E39",
+	NvimTreeGitIgnoredIcon = "#8C8C8C",
+}
+
+for group, fg in pairs(git_icon_highlights) do
+	vim.api.nvim_set_hl(0, group, { fg = fg })
+end
 
 vim.g.nvim_tree_respect_buf_cwd = 1
 
