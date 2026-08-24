@@ -23,8 +23,11 @@ renderer = {
 		},
 	},
 	view = {
-		width = 25,
+		width = 35,
 		side = 'left',
+	},
+	filters = {
+		git_ignored = false,
 	},
 	sync_root_with_cwd = true, --fix to open cwd with tree
 	respect_buf_cwd = true,

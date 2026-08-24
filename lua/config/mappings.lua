@@ -53,13 +53,14 @@ map("n", "<leader>g", ":lua require('fzf-lua').grep()<CR>") --grep
 map("n", "<leader>G", ":lua require('fzf-lua').grep_cword()<CR>") --grep word under cursor
 
 -- misc
-map("n", "<leader>s", ":%s//g<Left><Left>") --replace all
+map("n", "<leader>s", ":%s/") --replace all
 map("n", "<leader>t", ":NvimTreeToggle<CR>") --open file explorer
 map("n", "<leader>P", ":PlugInstall<CR>") --vim-plug
 map('n', '<leader>z', ":lua require('FTerm').open()<CR>") --open term
 map('t', '<Esc>', '<C-\\><C-n><CMD>lua require("FTerm").close()<CR>') --preserves session
 map("n", "<leader>w", ":w<CR>") --write but one less key
 map("n", "<leader>d", ":w ") --duplicate to new name
+map("n", "<leader>mm", ":mksession! .vim<Left><Left><Left><Left>") --make session
 map("n", "<leader>x", "<cmd>!chmod +x %<CR>") --make a file executable
 map("n", "<leader>mv", ":!mv % ") --move a file to a new dir
 map("n", "<leader>R", ":so %<CR>") --reload neovim config
@@ -67,6 +68,103 @@ map("n", "<leader>u", ':silent !xdg-open "<cWORD>" &<CR>') --open a url under cu
 map("v", "<leader>i", "=gv") --auto indent
 map("n", "<leader>W", ":set wrap!<CR>") --toggle wrap
 map("n", "<leader>l", ":Twilight<CR>") --surrounding dim
+
+local reference_line_ns = vim.api.nvim_create_namespace("reference_line")
+vim.api.nvim_set_hl(0, "ReferenceLine", { bg = "#3A3F4B" })
+
+map("n", "<leader>na", function() --add reference line tint
+	local bufnr = vim.api.nvim_get_current_buf()
+	vim.api.nvim_buf_clear_namespace(bufnr, reference_line_ns, 0, -1)
+	vim.api.nvim_buf_set_extmark(bufnr, reference_line_ns, vim.fn.line(".") - 1, 0, {
+		line_hl_group = "ReferenceLine",
+		priority = 250,
+	})
+end)
+
+map("n", "<leader>ns", function() --clear reference line tint
+	vim.api.nvim_buf_clear_namespace(0, reference_line_ns, 0, -1)
+end)
+
+-- diagnostics
+vim.keymap.set("n", "]d", function()
+	vim.diagnostic.jump({ count = 1, float = true })
+end, { desc = "next diagnostic" })
+
+vim.keymap.set("n", "[d", function()
+	vim.diagnostic.jump({ count = -1, float = true })
+end, { desc = "previous diagnostic" })
+
+vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, {
+	desc = "show line diagnostic",
+})
+
+vim.keymap.set("n", "<leader>E", function()
+	vim.diagnostic.setloclist({ open = true })
+end, { desc = "list buffer diagnostics" })
+
+vim.keymap.set("n", "<leader>L", "<Cmd>lclose<CR>", {
+	desc = "close diagnostics list",
+})
+
+-- Convert SV port declaration to instance port
+vim.keymap.set("n", "<leader>p", "g_byiwS.<C-r>0(),<Esc>F(a", {
+    desc = "port declare -> instance",
+})
+
+local function sv_ports_to_instance()
+	local mode = vim.fn.mode()
+	local start_line
+	local end_line
+
+	if mode == "v" or mode == "V" or mode == "\22" then
+		start_line = vim.fn.line("v")
+		end_line = vim.fn.line(".")
+	else
+		start_line = vim.fn.line("'<")
+		end_line = vim.fn.line("'>")
+	end
+
+	if start_line > end_line then
+		start_line, end_line = end_line, start_line
+	end
+
+	local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
+	local converted = {}
+
+	for _, line in ipairs(lines) do
+		local indent, rest = line:match("^(%s*)(.-)%s*$")
+		rest = rest:gsub("%s*//.*$", "")
+		rest = rest:gsub("[%s,;]+$", "")
+
+		local name = rest:match("([%a_][%w_$]*)$")
+		local has_direction = rest:match("^input%f[%W]")
+			or rest:match("^output%f[%W]")
+			or rest:match("^inout%f[%W]")
+
+		if name and has_direction then
+			table.insert(converted, string.format("%s.%s(%s),", indent, name, name))
+		else
+			table.insert(converted, line)
+		end
+	end
+
+	vim.api.nvim_buf_set_lines(0, start_line - 1, end_line, false, converted)
+end
+
+-- Convert selected SV port declarations to instance ports
+vim.keymap.set("x", "<leader>mw", sv_ports_to_instance, {
+	desc = "port declarations -> instance ports",
+})
+
+-- Instance port -> logic declaration (leader then m then s)
+vim.keymap.set("n", "<leader>ms", "0f(l\"ayiwSlogic [:0] <Esc>\"apA;<Esc>0f:i", {
+	desc = "instance port -> logic",
+})
+
+-- Instance port -> scalar logic declaration (leader then m then d)
+vim.keymap.set("n", "<leader>md", "0f(l\"ayiwSlogic <Esc>\"apA;<Esc>", {
+	desc = "instance port -> scalar logic",
+})
 
 -- decisive csv
 map("n", "<leader>csa", ":lua require('decisive').align_csv({})<cr>")

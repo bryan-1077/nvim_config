@@ -1,4 +1,6 @@
-require('lint').linters_by_ft = { --some of these need to be installed from package manager
+local lint = require('lint')
+
+lint.linters_by_ft = { --some of these need to be installed from package manager
   python = {'ruff'},
   sh = {'bash'},
   c = {'cppcheck'},
@@ -6,6 +8,10 @@ require('lint').linters_by_ft = { --some of these need to be installed from pack
   css = {'stylelint'},
   html = {'htmlhint'},
 }
+
+pcall(function()
+  require('setup_systemverilog').setupLinter(lint)
+end)
 
 -- Some linters require a file to be saved to disk, others support linting stdin input.
 -- For such linters you could also define a more aggressive autocmd,

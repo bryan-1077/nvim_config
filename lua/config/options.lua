@@ -18,6 +18,7 @@ local options = {
 	number = true, --numbering lines
 	relativenumber = true, --toggle bound to leader nn
 	numberwidth = 4,
+	signcolumn = "yes",
 
 	smarttab = true, --indentation stuff
 	cindent = true,
@@ -45,5 +46,20 @@ for k, v in pairs(options) do
 end
 
 vim.diagnostic.config({
-	signs = false,
+	signs = {
+		text = {
+			[vim.diagnostic.severity.ERROR] = "E",
+			[vim.diagnostic.severity.WARN] = "W",
+			[vim.diagnostic.severity.INFO] = "I",
+			[vim.diagnostic.severity.HINT] = "H",
+		},
+		numhl = {
+			[vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
+			[vim.diagnostic.severity.WARN] = "DiagnosticSignWarn",
+			[vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
+			[vim.diagnostic.severity.HINT] = "DiagnosticSignHint",
+		},
+	},
+	virtual_text = false,
+	underline = true,
 })

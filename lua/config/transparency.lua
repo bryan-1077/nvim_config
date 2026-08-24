@@ -1,7 +1,15 @@
 local M = {}
 
-local menu_bg = "#655d77"
-local menu_fg = "#1c1b22"
+-- Palette provided by user
+local menu_bg = "#1b1625"         -- very dark plum / charcoal
+local menu_fg = "#ddd7e8"         -- main text (soft lavender-white)
+local menu_sel_bg = "#3a2f52"     -- muted violet (selected item)
+local menu_sel_fg = "#ddd7e8"
+local menu_secondary = "#8f859e"  -- secondary text / annotations
+local border_fg = "#57486f"       -- border subdued purple
+local func_icon = "#9d8cff"       -- function/method icons
+local var_field = "#8bd5ca"       -- variables / fields
+local keyword_fg = "#d99bc5"      -- keywords / classes
 
 local transparent_groups = {
 	-- Neovim
@@ -68,12 +76,41 @@ function M.apply()
 			highlight = {}
 		end
 
-		highlight.bg = menu_bg
-		highlight.fg = highlight.fg or menu_fg
+			if group:match("Sel$") then
+				highlight.bg = menu_sel_bg
+				highlight.fg = highlight.fg or menu_sel_fg
+			else
+				highlight.bg = menu_bg
+				highlight.fg = highlight.fg or menu_fg
+			end
 		highlight.cterm = nil
 		highlight.ctermbg = nil
 		vim.api.nvim_set_hl(0, group, highlight)
 	end
+
+	-- Explicitly set related highlight groups for completion, floating borders, and symbol kinds
+	vim.api.nvim_set_hl(0, 'Pmenu', { bg = menu_bg, fg = menu_fg })
+	vim.api.nvim_set_hl(0, 'PmenuSel', { bg = menu_sel_bg, fg = menu_sel_fg })
+	vim.api.nvim_set_hl(0, 'PmenuExtra', { bg = menu_bg, fg = menu_secondary })
+	vim.api.nvim_set_hl(0, 'PmenuKind', { bg = menu_bg, fg = menu_secondary })
+	vim.api.nvim_set_hl(0, 'PmenuMatch', { bg = menu_bg, fg = menu_secondary })
+	vim.api.nvim_set_hl(0, 'PmenuSbar', { bg = menu_bg })
+	vim.api.nvim_set_hl(0, 'PmenuThumb', { bg = menu_sel_bg })
+
+	vim.api.nvim_set_hl(0, 'FloatBorder', { fg = border_fg })
+	vim.api.nvim_set_hl(0, 'FloatTitle', { fg = border_fg })
+
+	-- Completion / lsp kind icons
+	vim.api.nvim_set_hl(0, 'CmpItemKindFunction', { fg = func_icon })
+	vim.api.nvim_set_hl(0, 'CmpItemKindMethod', { fg = func_icon })
+	vim.api.nvim_set_hl(0, 'CmpItemKindVariable', { fg = var_field })
+	vim.api.nvim_set_hl(0, 'CmpItemKindField', { fg = var_field })
+
+	-- Language groups
+	vim.api.nvim_set_hl(0, 'Function', { fg = func_icon })
+	vim.api.nvim_set_hl(0, 'Identifier', { fg = var_field })
+	vim.api.nvim_set_hl(0, 'Keyword', { fg = keyword_fg })
+	vim.api.nvim_set_hl(0, 'Type', { fg = keyword_fg })
 end
 
 function M.setup()

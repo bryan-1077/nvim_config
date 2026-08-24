@@ -6,6 +6,7 @@ vim.filetype.add({
 		svh = "systemverilog",
 		v = "verilog",
 		vh = "verilog",
+		f = "conf",
 	},
 })
 

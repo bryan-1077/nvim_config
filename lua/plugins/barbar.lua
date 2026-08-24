@@ -37,10 +37,10 @@ require("barbar").setup({
 
     -- Configure the icons on the bufferline based on the visibility of a buffer.
     -- Supports all the base icon options, plus `modified` and `pinned`.
-    alternate = {filetype = {enabled = false}},
-    current = {buffer_index = true},
-    inactive = {button = '×'},
-    visible = {modified = {buffer_number = false}},
+	    alternate = { filetype = { enabled = false }, separator = { left = '│', right = '' } },
+	    current = { buffer_index = true, separator = { left = '│', right = '' } },
+	    inactive = { button = '×', separator = { left = '│', right = '' } },
+	    visible = { modified = { buffer_number = false }, separator = { left = '│', right = '' } },
   },
 
   sidebar_filetypes = {   -- Set the filetypes which barbar will offset itself for
@@ -76,9 +76,6 @@ local active_fg = "#ffffff"
 
 local active_groups = {
   "BufferCurrent",
-  "BufferCurrentADDED",
-  "BufferCurrentCHANGED",
-  "BufferCurrentDELETED",
   "BufferCurrentERROR",
   "BufferCurrentHINT",
   "BufferCurrentINFO",
@@ -105,4 +102,30 @@ for _, group in ipairs(active_groups) do
     fg = active_fg,
     bold = true,
   })
+end
+
+local active_git_groups = {
+  BufferCurrentADDED = "#59ff5a",
+  BufferCurrentCHANGED = "#599eff",
+  BufferCurrentDELETED = "#ff4d4d",
+}
+
+for group, fg in pairs(active_git_groups) do
+  vim.api.nvim_set_hl(0, group, {
+    bg = active_bg,
+    fg = fg,
+  })
+end
+
+for _, group in ipairs({
+  "BufferCurrentSign",
+  "BufferCurrentSignRight",
+  "BufferVisibleSign",
+  "BufferVisibleSignRight",
+  "BufferInactiveSign",
+  "BufferInactiveSignRight",
+  "BufferAlternateSign",
+  "BufferAlternateSignRight",
+}) do
+  vim.api.nvim_set_hl(0, group, { link = "WinSeparator" })
 end

@@ -27,9 +27,19 @@ local highlights = {
 		bold = true,
 	},
 
+	["@keyword.conditional.systemverilog"] = {
+		fg = "#8bdc9d",
+		bold = true,
+	},
+
 	-- Preprocessor directives such as `define and `timescale
 	["@keyword.directive.define.systemverilog"] = {
 		fg = "#c678dd",
+		bold = true,
+	},
+
+	["@label.systemverilog"] = {
+		fg = "#2dd4bf",
 		bold = true,
 	},
 
@@ -111,7 +121,7 @@ local highlights = {
 	-- ============================================================
 
 	["@operator.systemverilog"] = {
-		fg = "#abb2bf",
+		fg = "#c3cad3",
 	},
 
 	-- ============================================================

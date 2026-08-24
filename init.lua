@@ -25,6 +25,13 @@ Plug('romgrk/barbar.nvim') --bufferline
 Plug('goolord/alpha-nvim') --pretty startup
 Plug('nvim-treesitter/nvim-treesitter') --improved syntax
 Plug('mfussenegger/nvim-lint') --async linter
+Plug('neovim/nvim-lspconfig') -- LSP config
+Plug('hrsh7th/nvim-cmp') -- completion
+Plug('hrsh7th/cmp-nvim-lsp') -- lsp source for nvim-cmp
+Plug('hrsh7th/cmp-buffer') -- buffer completions
+Plug('hrsh7th/cmp-path') -- path completions
+Plug('L3MON4D3/LuaSnip') -- snippet engine
+Plug('saadparwaiz1/cmp_luasnip') -- luasnip source for nvim-cmp
 Plug('nvim-tree/nvim-tree.lua') --file explorer
 Plug('windwp/nvim-autopairs') --autopairs 
 Plug('kylechui/nvim-surround') --surround editing
@@ -47,6 +54,9 @@ require("config.options")
 require("config.autocmd")
 require("config.transparency").setup()
 require("config.systemverilog")
+pcall(function()
+    require("setup_systemverilog").setupFormatter()
+end)
 
 require("plugins.alpha")
 -- require("plugins.autopairs")
@@ -59,6 +69,8 @@ require("plugins.comment")
 require("plugins.gitsigns")
 require("plugins.lualine")
 require("plugins.nvim-lint")
+require("plugins.cmp")
+require("plugins.lspconfig")
 -- require("plugins.nvim-tree")
 require("plugins.render-markdown")
 -- require("plugins.treesitter")
